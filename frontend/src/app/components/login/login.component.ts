@@ -19,20 +19,20 @@ export class LoginComponent implements OnInit {
 
   createFormGroup(): FormGroup {
 
-    //  return new FormGroup({
-    //   email: new FormControl("", [Validators.required, Validators.email]),
-    //   password: new FormControl("", [
-    //     Validators.required,
-    //     Validators.minLength(7),
-    //   ]),
-    // });
-    return new FormGroup({
-      email: new FormControl("testuser@gmail.com", [Validators.required, Validators.email]),
-      password: new FormControl("test123", [
+     return new FormGroup({
+      email: new FormControl("", [Validators.required, Validators.email]),
+      password: new FormControl("", [
         Validators.required,
         Validators.minLength(7),
       ]),
     });
+    // return new FormGroup({
+    //   email: new FormControl("testuser@gmail.com", [Validators.required, Validators.email]),
+    //   password: new FormControl("test123", [
+    //     Validators.required,
+    //     Validators.minLength(7),
+    //   ]),
+    // });
   }
 
   login(): void {

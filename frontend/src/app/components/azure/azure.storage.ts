@@ -80,3 +80,24 @@ export async function uploadFile(content: CONTENT) {
   });
   return `Upload block blob ${content.filename} successfully ${uploadBlobResponse.requestId}`;
 }
+
+export async function downloadBlob(containerName: string, filename: string) {
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+  const blobClient = containerClient.getBlobClient(filename);
+
+  // Get blob content from position 0 to the end
+  // In browsers, get downloaded data by accessing downloadBlockBlobResponse.blobBody
+  const downloadBlockBlobResponse = await blobClient.download();
+  const downloaded = await downloadBlockBlobResponse.blobBody;
+  let tmp = <Blob> downloaded
+  var url = window.URL.createObjectURL(tmp);
+      window.open(url);
+  console.log("Downloaded blob content", downloaded);
+  console.log(
+    "\t",downloadBlockBlobResponse.blobBody);
+
+
+  return `Downloaded Blob ${filename} successfully`;
+
+  // [Browsers only] A helper method used to convert a browser Blob into string.
+}

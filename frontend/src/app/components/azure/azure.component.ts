@@ -10,7 +10,8 @@ import {
   CONTENT,
   uploadFile, 
   deleteBlob,
-  deleteContainerV
+  deleteContainerV,
+  downloadBlob
 } from "./azure.storage";
 
 @Component({
@@ -42,16 +43,19 @@ export class AzureComponent implements OnInit {
 
   upload(file: any) {
     console.log(file.files.length);
+    debugger;
     if (file.files.length > 0) {
       [...file.files].forEach((file: any) => {
         let content: CONTENT = {
           containerName: this.selectedContainer,
           file: file,
-          filename: `${this.selectedContainer}-${Date.now()}.${
+          filename: `${this.selectedContainer}-${file.name.substring(0,file.name.lastIndexOf("."))}-${Date.now()}.${
             file.name.split(".")[1]
           }`,
         };
-        uploadFile(content).then((res: string) => {
+        uploadFile(content).then(async (res: string) => {
+          await this.listFiles(this.selectedContainer);
+
           console.log(res);
         });
         console.log(file);
@@ -60,7 +64,6 @@ export class AzureComponent implements OnInit {
   }
 
   create(value: string) {
-    debugger;
     createContainer(value).then(async (resp) => {
        await this.getContainers();
       console.log(resp);
@@ -76,14 +79,22 @@ export class AzureComponent implements OnInit {
   }
 
   delete(value: string) {
-    deleteBlob(this.selectedContainer, value).then((resp: string) => {
+    deleteBlob(this.selectedContainer, value).then(async (resp: string) => {
+      await this.listFiles(this.selectedContainer);
       console.log(resp);
     });
   }
 
   deleteContainer(value: string) {
-    deleteContainerV(value).then((resp: string) => {
+    deleteContainerV(value).then(async (resp: string) => {
+       await this.getContainers();
       console.log(resp);
     });
+  }
+
+  downloadFile(container:string, filename: string){
+downloadBlob(container,filename).then((res)=>{
+
+})
   }
 }
